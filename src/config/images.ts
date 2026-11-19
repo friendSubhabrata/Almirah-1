@@ -1,3 +1,5 @@
+import { withBase } from './site';
+
 /**
  * Central image manifest.
  * Currently uses local illustrative sample images stored in /src/assets/images/.
@@ -26,7 +28,7 @@ export const SITE_IMAGES: Record<
 > = {
   hero: {
     id: 'hero',
-    src: '/src/assets/images/hero_steel_almirah_1794928311605.jpg',
+    src: withBase('/src/assets/images/hero_steel_almirah_1794928311605.jpg'),
     width: 1280,
     height: 720,
     isIllustrative: true,
@@ -41,7 +43,7 @@ export const SITE_IMAGES: Record<
   },
   beforeRust: {
     id: 'beforeRust',
-    src: '/src/assets/images/before_rusted_almirah_1794928311940.jpg',
+    src: withBase('/src/assets/images/before_rusted_almirah_1794928311940.jpg'),
     width: 1024,
     height: 768,
     isIllustrative: true,
@@ -56,7 +58,7 @@ export const SITE_IMAGES: Record<
   },
   afterPainted: {
     id: 'afterPainted',
-    src: '/src/assets/images/after_painted_almirah_1794928312568.jpg',
+    src: withBase('/src/assets/images/after_painted_almirah_1794928312568.jpg'),
     width: 1024,
     height: 768,
     isIllustrative: true,
@@ -71,7 +73,7 @@ export const SITE_IMAGES: Record<
   },
   paintingPrep: {
     id: 'paintingPrep',
-    src: '/src/assets/images/doorstep_painting_prep_1794928312522.jpg',
+    src: withBase('/src/assets/images/doorstep_painting_prep_1794928312522.jpg'),
     width: 1024,
     height: 768,
     isIllustrative: true,
@@ -86,7 +88,7 @@ export const SITE_IMAGES: Record<
   },
   lockRepair: {
     id: 'lockRepair',
-    src: '/src/assets/images/almirah_lock_hinge_repair_1794928313140.jpg',
+    src: withBase('/src/assets/images/almirah_lock_hinge_repair_1794928313140.jpg'),
     width: 1024,
     height: 768,
     isIllustrative: true,

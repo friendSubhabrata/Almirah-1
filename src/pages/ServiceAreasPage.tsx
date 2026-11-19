@@ -1,5 +1,5 @@
 import { ArrowRight, MapPin, MessageCircle, Phone } from 'lucide-react';
-import { SITE_CONFIG, buildWhatsAppUrl } from '../config/site';
+import { SITE_CONFIG, buildWhatsAppUrl, withBase } from '../config/site';
 import { LOCATION_PAGES } from '../data/locations';
 import { UI_COPY } from '../data/translations';
 import { Language } from '../types/i18n';
@@ -45,7 +45,7 @@ export function ServiceAreasPage({ lang, onNavigate }: ServiceAreasPageProps) {
           {LOCATION_PAGES.map((loc) => (
             <a
               key={loc.slug}
-              href={`/${loc.slug}/`}
+              href={withBase(`/${loc.slug}/`)}
               onClick={(e) => {
                 e.preventDefault();
                 onNavigate(`/${loc.slug}/`);

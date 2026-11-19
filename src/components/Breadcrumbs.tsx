@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react';
+import { withBase } from '../config/site';
 import { Language } from '../types/i18n';
 
 export interface BreadcrumbItem {
@@ -30,7 +31,7 @@ export function Breadcrumbs({ items, onNavigate, lang }: BreadcrumbsProps) {
                 </span>
               ) : (
                 <a
-                  href={item.href}
+                  href={withBase(item.href)}
                   onClick={(e) => {
                     e.preventDefault();
                     onNavigate(item.href!);

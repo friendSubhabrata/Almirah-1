@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, Check, ChevronDown, MapPin, MessageCircle, Phone } from 'lucide-react';
-import { SITE_CONFIG, buildWhatsAppUrl } from '../config/site';
+import { SITE_CONFIG, buildWhatsAppUrl, withBase } from '../config/site';
 import { LOCATION_PAGES } from '../data/locations';
 import { SERVICES_LIST } from '../data/services';
 import { FAQS_LIST, UI_COPY } from '../data/translations';
@@ -102,7 +102,7 @@ export function HomePage({ lang, onNavigate }: HomePageProps) {
               </p>
             </div>
             <a
-              href="/services/"
+              href={withBase('/services/')}
               onClick={(e) => {
                 e.preventDefault();
                 onNavigate('/services/');
@@ -150,7 +150,7 @@ export function HomePage({ lang, onNavigate }: HomePageProps) {
                       <span>{UI_COPY.cta.whatsappService[lang]}</span>
                     </a>
                     <a
-                      href="/services/"
+                      href={withBase('/services/')}
                       onClick={(e) => {
                         e.preventDefault();
                         onNavigate('/services/');
@@ -267,7 +267,7 @@ export function HomePage({ lang, onNavigate }: HomePageProps) {
               </p>
             </div>
             <a
-              href="/service-areas/"
+              href={withBase('/service-areas/')}
               onClick={(e) => {
                 e.preventDefault();
                 onNavigate('/service-areas/');
@@ -283,7 +283,7 @@ export function HomePage({ lang, onNavigate }: HomePageProps) {
             {LOCATION_PAGES.map((loc) => (
               <a
                 key={loc.slug}
-                href={`/${loc.slug}/`}
+                href={withBase(`/${loc.slug}/`)}
                 onClick={(e) => {
                   e.preventDefault();
                   onNavigate(`/${loc.slug}/`);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { stripBase, withBase } from './config/site';
 import { getLocationBySlug } from './data/locations';
 import { UI_COPY } from './data/translations';
 import { Language, PageRoute } from './types/i18n';
@@ -17,9 +18,9 @@ import { ServicesPage } from './pages/ServicesPage';
 const LANG_STORAGE_KEY = 'kac_lang';
 
 function normalizePathname(raw: string): string {
-  const clean = raw.split('?')[0].split('#')[0] || '/';
-  if (clean === '/' || clean === '/index.html') return '/';
-  const withoutIndex = clean.replace(/\/index\.html$/, '');
+  const stripped = stripBase(raw.split('?')[0].split('#')[0] || '/');
+  if (stripped === '/' || stripped === '/index.html') return '/';
+  const withoutIndex = stripped.replace(/\/index\.html$/, '');
   return withoutIndex.endsWith('/') ? withoutIndex : `${withoutIndex}/`;
 }
 
@@ -81,7 +82,7 @@ export default function App() {
   const handleNavigate = (targetPath: string) => {
     const normalized = normalizePathname(targetPath);
     if (normalized !== currentPath) {
-      window.history.pushState({}, '', normalized);
+      window.history.pushState({}, '', withBase(normalized));
       setCurrentPath(normalized);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });

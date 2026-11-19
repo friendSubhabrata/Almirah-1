@@ -24,11 +24,50 @@ export const SITE_CONFIG = {
   googleBusinessProfileUrl: '',
 } as const;
 
+/**
+ * Returns Vite's configured base path normalized with leading and trailing slashes
+ * (e.g. "/" for root/custom domain, or "/repo-name/" for project GitHub Pages).
+ */
+export function getBasePath(): string {
+  const raw = import.meta.env.BASE_URL || '/';
+  const withLeading = raw.startsWith('/') ? raw : `/${raw}`;
+  return withLeading.endsWith('/') ? withLeading : `${withLeading}/`;
+}
+
+/**
+ * Prefixes an app-internal path (e.g. "/services/" or "/src/assets/images/hero.jpg")
+ * with the configured GitHub Pages base path when deployed under a repository subpath.
+ */
+export function withBase(appPath: string): string {
+  const base = getBasePath();
+  const clean = appPath.startsWith('/') ? appPath.slice(1) : appPath;
+  return `${base}${clean}`;
+}
+
+/**
+ * Strips the configured base path from window.location.pathname so routing
+ * resolves identically on "/" and "/<repo-name>/".
+ */
+export function stripBase(pathname: string): string {
+  const base = getBasePath();
+  if (base === '/') return pathname || '/';
+  const baseNoTrailing = base.slice(0, -1);
+  if (pathname === baseNoTrailing || pathname === base) return '/';
+  if (pathname.startsWith(base)) {
+    return `/${pathname.slice(base.length)}`;
+  }
+  return pathname || '/';
+}
+
 export function getCanonicalBase(): string {
+  const buildSiteUrl = import.meta.env.VITE_SITE_URL;
+  if (buildSiteUrl && typeof buildSiteUrl === 'string') {
+    return buildSiteUrl.replace(/\/+$/, '');
+  }
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    // When deployed on a custom domain, runtime origin matches; fallback to configured siteDomain
     if (!window.location.hostname.includes('run.app')) {
-      return window.location.origin;
+      const baseNoTrailing = getBasePath().replace(/\/$/, '');
+      return `${window.location.origin}${baseNoTrailing}`;
     }
   }
   return SITE_CONFIG.siteDomain;

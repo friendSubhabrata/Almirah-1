@@ -1,5 +1,5 @@
 import { MapPin, MessageCircle, Phone } from 'lucide-react';
-import { SITE_CONFIG, buildWhatsAppUrl } from '../config/site';
+import { SITE_CONFIG, buildWhatsAppUrl, withBase } from '../config/site';
 import { UI_COPY } from '../data/translations';
 import { Language } from '../types/i18n';
 import { Breadcrumbs } from '../components/Breadcrumbs';
@@ -94,7 +94,7 @@ export function AboutPage({ lang, onNavigate }: AboutPageProps) {
             </p>
           </div>
           <a
-            href="/service-areas/"
+            href={withBase('/service-areas/')}
             onClick={(e) => {
               e.preventDefault();
               onNavigate('/service-areas/');

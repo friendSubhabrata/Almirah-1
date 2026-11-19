@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Menu, Phone, X } from 'lucide-react';
-import { SITE_CONFIG } from '../config/site';
+import { SITE_CONFIG, withBase } from '../config/site';
 import { UI_COPY } from '../data/translations';
 import { Language } from '../types/i18n';
 import { BrandMark } from './BrandMark';
@@ -38,7 +38,7 @@ export function Header({ lang, onToggleLang, currentPath, onNavigate }: HeaderPr
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4 lg:gap-8">
         {/* Zone 1: Single-line Brand Zone */}
         <a
-          href="/"
+          href={withBase('/')}
           onClick={(e) => {
             e.preventDefault();
             handleLinkClick('/');
@@ -56,7 +56,7 @@ export function Header({ lang, onToggleLang, currentPath, onNavigate }: HeaderPr
             return (
               <a
                 key={item.path}
-                href={item.path}
+                href={withBase(item.path)}
                 onClick={(e) => {
                   e.preventDefault();
                   handleLinkClick(item.path);
@@ -129,7 +129,7 @@ export function Header({ lang, onToggleLang, currentPath, onNavigate }: HeaderPr
               return (
                 <a
                   key={item.path}
-                  href={item.path}
+                  href={withBase(item.path)}
                   onClick={(e) => {
                     e.preventDefault();
                     handleLinkClick(item.path);

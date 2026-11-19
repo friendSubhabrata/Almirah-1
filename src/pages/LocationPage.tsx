@@ -1,5 +1,5 @@
 import { ArrowRight, Check, MapPin, MessageCircle, Phone } from 'lucide-react';
-import { SITE_CONFIG, buildWhatsAppUrl } from '../config/site';
+import { SITE_CONFIG, buildWhatsAppUrl, withBase } from '../config/site';
 import { LOCATION_PAGES, getLocationBySlug } from '../data/locations';
 import { SERVICES_LIST } from '../data/services';
 import { UI_COPY } from '../data/translations';
@@ -170,7 +170,7 @@ export function LocationPage({ slug, lang, onNavigate }: LocationPageProps) {
               {lang === 'en' ? 'Other Kolkata Service Areas' : 'কলকাতার অন্যান্য পরিষেবা এলাকা'}
             </h2>
             <a
-              href="/service-areas/"
+              href={withBase('/service-areas/')}
               onClick={(e) => {
                 e.preventDefault();
                 onNavigate('/service-areas/');
@@ -184,7 +184,7 @@ export function LocationPage({ slug, lang, onNavigate }: LocationPageProps) {
             {otherLocations.map((other) => (
               <a
                 key={other.slug}
-                href={`/${other.slug}/`}
+                href={withBase(`/${other.slug}/`)}
                 onClick={(e) => {
                   e.preventDefault();
                   onNavigate(`/${other.slug}/`);

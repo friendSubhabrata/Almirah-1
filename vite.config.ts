@@ -113,14 +113,22 @@ function escapeHtmlAttr(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+function normalizeBase(raw?: string): string {
+  if (!raw) return '/';
+  const cleaned = `/${raw.replace(/^\/+|\/+$/g, '')}/`;
+  return cleaned === '//' ? '/' : cleaned;
+}
+
 export default defineConfig(() => {
+  const basePath = normalizeBase(process.env.VITE_BASE_PATH);
+  const siteUrl = (process.env.VITE_SITE_URL || 'https://kolkataalmirahcare.in').replace(/\/+$/, '');
+
   return {
+    base: basePath,
     plugins: [
       react(),
       tailwindcss(),
-      // Copies src/assets into dist/ so root-relative URLs like
-      // "/src/assets/images/..." (e.g. generate_image output) still resolve
-      // in production builds. Do not remove.
+      // Copies src/assets into dist/ and generates GitHub Pages-ready static routes
       {
         name: 'copy-unbundled-src-assets',
         apply: 'build',
@@ -135,17 +143,47 @@ export default defineConfig(() => {
             fs.cpSync(srcAssets, distAssets, { recursive: true, force: true });
           }
 
+          // Update sitemap.xml and robots.txt with the active GitHub Pages URL or custom domain
+          const defaultDomain = 'https://kolkataalmirahcare.in';
+          for (const fileName of ['sitemap.xml', 'robots.txt']) {
+            const filePath = path.resolve(distDir, fileName);
+            if (fs.existsSync(filePath)) {
+              const content = fs.readFileSync(filePath, 'utf-8');
+              fs.writeFileSync(filePath, content.split(defaultDomain).join(siteUrl), 'utf-8');
+            }
+          }
+
+          // Update 404.html links to respect repository subpath if deployed on github.io/<repo>/
+          const notFoundPath = path.resolve(distDir, '404.html');
+          if (fs.existsSync(notFoundPath) && basePath !== '/') {
+            let notFoundHtml = fs.readFileSync(notFoundPath, 'utf-8');
+            notFoundHtml = notFoundHtml
+              .replace(/href="\/favicon\.svg"/g, `href="${basePath}favicon.svg"`)
+              .replace(/href="\/"/g, `href="${basePath}"`)
+              .replace(/href="\/(services|service-areas|about|contact)\/"/g, `href="${basePath}$1/"`);
+            fs.writeFileSync(notFoundPath, notFoundHtml, 'utf-8');
+          }
+
           // Generate static route directories (e.g. dist/steel-almirah-painting-kolkata/index.html)
           // for GitHub Pages compatibility and per-route static SEO tags.
           const indexHtmlPath = path.resolve(distDir, 'index.html');
           if (fs.existsSync(indexHtmlPath)) {
-            const baseHtml = fs.readFileSync(indexHtmlPath, 'utf-8');
-            const domain = 'https://kolkataalmirahcare.in';
+            let baseHtml = fs.readFileSync(indexHtmlPath, 'utf-8');
+            baseHtml = baseHtml
+              .replace(
+                /<link rel="canonical" href="[\s\S]*?"\s*\/?>/,
+                `<link rel="canonical" href="${siteUrl}/" />`
+              )
+              .replace(
+                /<meta property="og:url" content="[\s\S]*?"\s*\/?>/,
+                `<meta property="og:url" content="${siteUrl}/" />`
+              );
+            fs.writeFileSync(indexHtmlPath, baseHtml, 'utf-8');
 
             for (const item of STATIC_ROUTES_SEO) {
               const routeDir = path.resolve(distDir, item.route);
               fs.mkdirSync(routeDir, { recursive: true });
-              const canonical = `${domain}/${item.route}/`;
+              const canonical = `${siteUrl}/${item.route}/`;
               const safeTitle = escapeHtmlAttr(item.title);
               const safeDesc = escapeHtmlAttr(item.description);
 

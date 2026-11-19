@@ -86,14 +86,16 @@ git remote add origin https://github.com/<your-username>/kolkata-almirah-care.gi
 git push -u origin main
 ```
 
-### 3. Enable GitHub Pages
+### 3. Enable GitHub Pages (Free Hosting)
 1. Open your repository on GitHub → **Settings** → **Pages**.
 2. Under **Build and deployment → Source**, select **GitHub Actions**.
-3. The included `.github/workflows/deploy.yml` workflow will automatically run `npm run build` (generating `dist/` with static HTML files for all 17 routes, `sitemap.xml`, `robots.txt`, and `404.html`) and publish your site.
+3. Push to `main` (or trigger **Actions → Deploy Kolkata Almirah Care to GitHub Pages → Run workflow**).
+4. The workflow uses `actions/configure-pages@v5` to automatically detect your repository URL (`https://<your-username>.github.io/<repo-name>/`) and build all assets, images, `sitemap.xml`, `robots.txt`, `404.html`, and all 16 pre-rendered location/service route directories with the exact repository base path—no manual path edits required.
 
-### 4. Connect a Paid Custom Domain
-1. Ensure `public/CNAME` contains your exact domain (e.g., `kolkataalmirahcare.in` or `www.kolkataalmirahcare.in`).
+### 4. Connect a Paid Custom Domain (Optional Later Step)
+1. Rename `public/CNAME.example` to `public/CNAME` containing only your domain (e.g., `kolkataalmirahcare.in`).
 2. In GitHub → **Settings** → **Pages** → **Custom domain**, enter your domain and click **Save**.
+3. Once saved, the GitHub Actions workflow automatically switches the build back to root `/` and updates canonical URLs and `sitemap.xml` to your custom domain.
 
 ### 5. Configure DNS Records at Your Domain Registrar
 For an apex domain (`yourdomain.in`), add these four `A` records pointing to GitHub Pages:

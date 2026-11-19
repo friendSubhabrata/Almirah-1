@@ -1,5 +1,5 @@
 import { Home, Phone } from 'lucide-react';
-import { SITE_CONFIG } from '../config/site';
+import { SITE_CONFIG, withBase } from '../config/site';
 import { UI_COPY } from '../data/translations';
 import { Language } from '../types/i18n';
 
@@ -24,7 +24,7 @@ export function NotFoundPage({ lang, onNavigate }: NotFoundPageProps) {
 
         <div className="flex flex-wrap gap-3">
           <a
-            href="/"
+            href={withBase('/')}
             onClick={(e) => {
               e.preventDefault();
               onNavigate('/');

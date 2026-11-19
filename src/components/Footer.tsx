@@ -1,5 +1,5 @@
 import { Clock, MapPin, MessageCircle, Phone } from 'lucide-react';
-import { SITE_CONFIG, buildWhatsAppUrl } from '../config/site';
+import { SITE_CONFIG, buildWhatsAppUrl, withBase } from '../config/site';
 import { LOCATION_PAGES } from '../data/locations';
 import { UI_COPY } from '../data/translations';
 import { Language } from '../types/i18n';
@@ -73,7 +73,7 @@ export function Footer({ lang, onNavigate }: FooterProps) {
               {quickLinks.map((item) => (
                 <li key={item.path}>
                   <a
-                    href={item.path}
+                    href={withBase(item.path)}
                     onClick={(e) => {
                       e.preventDefault();
                       onNavigate(item.path);
@@ -96,7 +96,7 @@ export function Footer({ lang, onNavigate }: FooterProps) {
               {featuredAreas.map((loc) => (
                 <a
                   key={loc.slug}
-                  href={`/${loc.slug}/`}
+                  href={withBase(`/${loc.slug}/`)}
                   onClick={(e) => {
                     e.preventDefault();
                     onNavigate(`/${loc.slug}/`);
@@ -109,7 +109,7 @@ export function Footer({ lang, onNavigate }: FooterProps) {
             </div>
             <div className="mt-4">
               <a
-                href="/service-areas/"
+                href={withBase('/service-areas/')}
                 onClick={(e) => {
                   e.preventDefault();
                   onNavigate('/service-areas/');
